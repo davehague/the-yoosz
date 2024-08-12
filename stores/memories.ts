@@ -8,8 +8,7 @@ export const useMemoriesStore = defineStore("memories", () => {
 
   const fetchMemories = async () => {
     try {
-      const data = await PersistentDataService.multiRecordFetch("memories");
-      memories.value = data as Memory[];
+      memories.value = await PersistentDataService.getAllMemories();
     } catch (error) {
       console.error("Error fetching memories:", error);
     }
