@@ -1,75 +1,95 @@
-# Nuxt 3 Minimal Starter
+# Yoosz
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Yoosz is a web application for managing and storing memories. Built with Nuxt 3, it provides a user-friendly interface for creating, viewing, and organizing personal memories.
 
-## Setup
+## Features
 
-Make sure to install the dependencies:
+- Create and store memories
+- View a list of all memories
+- View individual memory details
+- Persistent data storage using Supabase
 
-```bash
-# npm
-npm install
+## Project Structure
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+```
+|-- components
+|   |-- MemoryCard.vue
+|   |-- MemoryForm.vue
+|   |-- MemoryList.vue
+|-- layouts
+|   |-- default.vue
+|-- pages
+|   |-- memories
+|   |   |-- index.vue
+|   |   |-- [id].vue
+|   |-- index.vue
+|-- plugins
+|   |-- init-store.ts
+|-- public
+|   |-- robots.txt
+|-- server
+|   |-- tsconfig.json
+|-- services
+|   |-- PersistentDataService.ts
+|-- stores
+|   |-- memories.ts
+|-- types
+|   |-- interfaces.ts
+|-- utils
+|   |-- supabaseClient.ts
 ```
 
-## Development Server
+## Technology Stack
 
-Start the development server on `http://localhost:3000`:
+- [Nuxt 3](https://nuxt.com/) - The Vue.js Framework
+- [Pinia](https://pinia.vuejs.org/) - State management
+- [Supabase](https://supabase.com/) - Backend and database
 
-```bash
-# npm
-npm run dev
+## Getting Started
 
-# pnpm
-pnpm run dev
+### Prerequisites
 
-# yarn
-yarn dev
+- Node.js (Latest LTS version recommended)
+- npm or yarn
 
-# bun
-bun run dev
-```
+### Installation
 
-## Production
+1. Clone the repository:
+   ```
+   git clone https://github.com/your-username/yoosz.git
+   cd yoosz
+   ```
 
-Build the application for production:
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-```bash
-# npm
-npm run build
+3. Set up environment variables:
+   Create a `.env` file in the root directory and add your Supabase credentials:
+   ```
+   SUPABASE_URL=your_supabase_url
+   SUPABASE_KEY=your_supabase_key
+   ```
 
-# pnpm
-pnpm run build
+4. Run the development server:
+   ```
+   npm run dev
+   ```
 
-# yarn
-yarn build
+5. Open your browser and navigate to `http://localhost:3000`
 
-# bun
-bun run build
-```
+## Available Scripts
 
-Locally preview production build:
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm run generate` - Generate a static version of the application
+- `npm run preview` - Preview the built application
 
-```bash
-# npm
-npm run preview
+## Contributing
 
-# pnpm
-pnpm run preview
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-# yarn
-yarn preview
+## License
 
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+This project is open source and available under the [MIT License](LICENSE).

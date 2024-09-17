@@ -1,32 +1,43 @@
-<!-- pages/memories/index.vue -->
 <template>
-  <div class="memories-page">
-    <h1>Browse Memories</h1>
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-center mb-8">Browse Memories</h1>
 
-    <div class="filters">
-      <input v-model="searchQuery" placeholder="Search memories..." class="search-input" />
+    <div class="space-y-4 md:space-y-0 md:flex md:items-center md:space-x-4 mb-8">
+      <input 
+        v-model="searchQuery" 
+        placeholder="Search memories..." 
+        class="w-full md:w-1/4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
 
-      <select v-model="selectedCategory" class="category-select">
+      <select 
+        v-model="selectedCategory" 
+        class="w-full md:w-1/4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
         <option value="">All Categories</option>
         <option v-for="category in categories" :key="category" :value="category">
           {{ category }}
         </option>
       </select>
 
-      <div class="tags-filter">
-        <span>Tags:</span>
-        <label v-for="tag in allTags" :key="tag" class="tag-checkbox">
-          <input type="checkbox" :value="tag" v-model="selectedTags" />
-          {{ tag }}
-        </label>
-      </div>
-
-      <select v-model="sortOption" class="sort-select">
+      <select 
+        v-model="sortOption" 
+        class="w-full md:w-1/4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
         <option value="dateAdded">Date Added</option>
         <option value="dateUpdated">Date Updated</option>
         <option value="rating">Rating</option>
         <option value="alphabetical">Alphabetical</option>
       </select>
+    </div>
+
+    <div class="mb-8">
+      <span class="font-semibold mr-2">Tags:</span>
+      <div class="flex flex-wrap gap-2">
+        <label v-for="tag in allTags" :key="tag" class="inline-flex items-center">
+          <input type="checkbox" :value="tag" v-model="selectedTags" class="form-checkbox h-5 w-5 text-blue-600" />
+          <span class="ml-2 text-gray-700">{{ tag }}</span>
+        </label>
+      </div>
     </div>
 
     <MemoryList :memories="filteredMemories" @edit="handleEditMemory" @delete="handleDeleteMemory" />
@@ -37,6 +48,7 @@
 import { ref, computed } from 'vue';
 import { useMemoriesStore } from '../../stores/memories';
 import MemoryList from '~/components/MemoryList.vue';
+import { useRouter } from 'vue-router';
 
 const memoriesStore = useMemoriesStore();
 const router = useRouter();
@@ -104,61 +116,3 @@ const handleDeleteMemory = (id: string) => {
   }
 };
 </script>
-
-<style scoped>
-.memories-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.filters {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.search-input,
-.category-select,
-.sort-select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.tags-filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-}
-
-.tag-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-@media (min-width: 768px) {
-  .filters {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .search-input,
-  .category-select,
-  .sort-select {
-    flex: 1;
-  }
-
-  .tags-filter {
-    flex-basis: 100%;
-  }
-}
-</style>

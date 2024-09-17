@@ -1,37 +1,38 @@
-<!-- pages/memories/[id].vue -->
 <template>
-  <div v-if="memory" class="memory-detail">
-    <h1>{{ isEditing ? 'Edit Memory' : memory.title }}</h1>
-    
-    <template v-if="!isEditing">
-      <div class="memory-info">
-        <p><strong>Category:</strong> {{ memory.category }}</p>
-        <p><strong>Tags:</strong> {{ memory.tags.join(', ') }}</p>
-        <p><strong>Rating:</strong> {{ '⭐'.repeat(memory.rating) }}</p>
-        <p><strong>Notes:</strong> {{ memory.notes }}</p>
-        <p v-if="memory.location"><strong>Location:</strong> {{ memory.location.address }}</p>
-        <a v-if="memory.url" :href="memory.url" alt="Memory URL">{{ memory.url }}</a>
-      </div>
+  <div class="max-w-2xl mx-auto px-4 py-8">
+    <div v-if="memory" class="bg-white rounded-lg shadow p-6">
+      <h1 class="text-3xl font-bold text-center mb-6">{{ isEditing ? 'Edit Memory' : memory.title }}</h1>
       
-      <div class="actions">
-        <button @click="isEditing = true">Edit</button>
-        <button @click="handleDelete" class="delete">Delete</button>
-        <button @click="router.push('/memories')" class="back">Back to List</button>
-      </div>
-    </template>
-    
-    <MemoryForm
-      v-else
-      :memory="memory"
-      @save="handleSave"
-      @cancel="isEditing = false"
-    />
-  </div>
-  <div v-else-if="loading" class="loading">
-    Loading memory...
-  </div>
-  <div v-else class="error">
-    Memory not found
+      <template v-if="!isEditing">
+        <div class="space-y-4">
+          <p><span class="font-semibold">Category:</span> {{ memory.category }}</p>
+          <p><span class="font-semibold">Tags:</span> {{ memory.tags.join(', ') }}</p>
+          <p><span class="font-semibold">Rating:</span> {{ '⭐'.repeat(memory.rating) }}</p>
+          <p><span class="font-semibold">Notes:</span> {{ memory.notes }}</p>
+          <p v-if="memory.location"><span class="font-semibold">Location:</span> {{ memory.location.address }}</p>
+          <a v-if="memory.url" :href="memory.url" class="text-blue-600 hover:underline">{{ memory.url }}</a>
+        </div>
+        
+        <div class="flex justify-between mt-8">
+          <button @click="isEditing = true" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Edit</button>
+          <button @click="handleDelete" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">Delete</button>
+          <button @click="router.push('/memories')" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">Back to List</button>
+        </div>
+      </template>
+      
+      <MemoryForm
+        v-else
+        :memory="memory"
+        @save="handleSave"
+        @cancel="isEditing = false"
+      />
+    </div>
+    <div v-else-if="loading" class="text-center py-8">
+      Loading memory...
+    </div>
+    <div v-else class="text-center py-8 text-red-500">
+      Memory not found
+    </div>
   </div>
 </template>
 
@@ -90,58 +91,3 @@ const handleDelete = async () => {
   }
 };
 </script>
-
-<style scoped>
-.memory-detail {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.memory-info p {
-  margin-bottom: 10px;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  margin-top: 20px;
-}
-
-.actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-button.delete {
-  background-color: #f44336;
-  color: white;
-}
-
-button.back {
-  background-color: #2196F3;
-  color: white;
-}
-
-.loading, .error {
-  text-align: center;
-  padding: 20px;
-}
-</style>
