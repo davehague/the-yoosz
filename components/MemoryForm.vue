@@ -48,7 +48,8 @@
         <Save class="w-4 h-4 mr-1" />
         {{ isEditing ? 'Update' : 'Save' }}
       </button>
-      <button v-if="isEditing" type="button" @click="$emit('cancel')" class="text-gray-600 hover:text-gray-700 flex items-center">
+      <button v-if="isEditing" type="button" @click="$emit('cancel')"
+        class="text-gray-600 hover:text-gray-700 flex items-center">
         <XCircle class="w-4 h-4 mr-1" />
         Cancel
       </button>

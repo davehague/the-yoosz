@@ -1,18 +1,9 @@
 <template>
   <div>
-    <MemoryFilters 
-      :memories="filteredMemories" 
-      :tags="uniqueTags"
-      @filter="applyFilters" 
-    />
+    <MemoryFilters :memories="filteredMemories" :tags="uniqueTags" @filter="applyFilters" />
     <div v-if="filteredMemories.length > 0" class="space-y-4 mt-6">
-      <MemoryCard 
-        v-for="memory in filteredMemories" 
-        :key="memory.id" 
-        :memory="memory"
-        @edit="handleEdit"
-        @delete="handleDelete"
-      />
+      <MemoryCard v-for="memory in filteredMemories" :key="memory.id" :memory="memory" @edit="handleEdit"
+        @delete="handleDelete" />
     </div>
     <div v-else class="text-center mt-6 text-gray-500">
       No memories found matching the current filters.
@@ -54,10 +45,10 @@ const filteredMemories = computed(() => {
   return allMemories.value.filter((memory) => {
     const categoryMatch = memory.category.toLowerCase() === currentCategory.value.toLowerCase();
     const tagMatch = !filters.value.tag || memory.tags.includes(filters.value.tag);
-    const searchMatch = !filters.value.search || 
+    const searchMatch = !filters.value.search ||
       memory.title.toLowerCase().includes(filters.value.search.toLowerCase()) ||
       (memory.notes && memory.notes.toLowerCase().includes(filters.value.search.toLowerCase()));
-    
+
     return categoryMatch && tagMatch && searchMatch;
   });
 });

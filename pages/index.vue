@@ -1,18 +1,14 @@
 <template>
-  <div class="min-h-screen bg-gray-100 p-4">    
+  <div class="min-h-screen bg-gray-100 p-4">
     <div class="mb-6">
-      <button
-        @click="toggleForm"
-        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
-      >
+      <button @click="toggleForm"
+        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
         {{ isFormVisible ? 'Hide' : 'Add New Memory' }}
       </button>
     </div>
 
-    <div
-      class="transition-all duration-300 ease-in-out"
-      :class="{ 'opacity-0 max-h-0 overflow-hidden': !isFormVisible, 'opacity-100 max-h-screen': isFormVisible }"
-    >
+    <div class="transition-all duration-300 ease-in-out"
+      :class="{ 'opacity-0 max-h-0 overflow-hidden': !isFormVisible, 'opacity-100 max-h-screen': isFormVisible }">
       <MemoryForm v-if="isFormVisible" @add-memory="addMemory" :category="currentCategory" />
     </div>
 

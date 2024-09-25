@@ -18,4 +18,4 @@ export type Memory = {
   };
   createdAt: Date;
   updatedAt: Date;
-}
+};

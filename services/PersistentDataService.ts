@@ -60,17 +60,19 @@ export default class PersistentDataService {
   // ============= Tags ============= //
   static async getTagsForCategory(category: string): Promise<string[]> {
     const { data, error } = await supabase
-      .from('memories')
-      .select('tags')
-      .ilike('category', category);
+      .from("memories")
+      .select("tags")
+      .ilike("category", category);
 
     if (error) {
-      console.error('Error fetching tags for category:', error);
+      console.error("Error fetching tags for category:", error);
       throw error;
     }
 
     // Flatten the array of tag arrays and remove duplicates
-    const uniqueTags = Array.from(new Set(data.flatMap(item => item.tags || [])));
+    const uniqueTags = Array.from(
+      new Set(data.flatMap((item) => item.tags || []))
+    );
     return uniqueTags;
   }
 
@@ -156,18 +158,17 @@ export default class PersistentDataService {
 
   static async getAllMemories(): Promise<Memory[]> {
     const { data, error } = await supabase
-      .from('memories')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("memories")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error('Error fetching all memories:', error);
+      console.error("Error fetching all memories:", error);
       throw error;
     }
 
     return data.map(this.mapDbMemoryToMemory);
   }
-
 
   private static mapDbMemoryToMemory(dbMemory: any): Memory {
     return {
@@ -179,8 +180,12 @@ export default class PersistentDataService {
       notes: dbMemory.notes,
       url: dbMemory.url,
       location: dbMemory.location,
-      createdAt: dbMemory.created_at ? new Date(dbMemory.created_at) : new Date(),
-      updatedAt: dbMemory.updated_at ? new Date(dbMemory.updated_at) : new Date(),
+      createdAt: dbMemory.created_at
+        ? new Date(dbMemory.created_at)
+        : new Date(),
+      updatedAt: dbMemory.updated_at
+        ? new Date(dbMemory.updated_at)
+        : new Date(),
     };
   }
 }

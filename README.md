@@ -9,36 +9,6 @@ Yoosz is a web application for managing and storing memories. Built with Nuxt 3,
 - View individual memory details
 - Persistent data storage using Supabase
 
-## Project Structure
-
-```
-|-- components
-|   |-- MemoryCard.vue
-|   |-- MemoryForm.vue
-|   |-- MemoryList.vue
-|-- layouts
-|   |-- default.vue
-|-- pages
-|   |-- memories
-|   |   |-- index.vue
-|   |   |-- [id].vue
-|   |-- index.vue
-|-- plugins
-|   |-- init-store.ts
-|-- public
-|   |-- robots.txt
-|-- server
-|   |-- tsconfig.json
-|-- services
-|   |-- PersistentDataService.ts
-|-- stores
-|   |-- memories.ts
-|-- types
-|   |-- interfaces.ts
-|-- utils
-|   |-- supabaseClient.ts
-```
-
 ## Technology Stack
 
 - [Nuxt 3](https://nuxt.com/) - The Vue.js Framework

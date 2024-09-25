@@ -18,7 +18,8 @@
       </span>
     </div>
 
-    <div v-if="memory.location && hasPhysicalAddress(memory.location.address)" class="flex flex-col items-start mt-2 text-sm text-gray-600">
+    <div v-if="memory.location && hasPhysicalAddress(memory.location.address)"
+      class="flex flex-col items-start mt-2 text-sm text-gray-600">
       <div class="flex items-center">
         <MapPinIcon class="w-4 h-4 mr-1" />
         {{ memory.location.address }}
