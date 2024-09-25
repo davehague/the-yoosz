@@ -53,7 +53,6 @@ const emit = defineEmits<{
 const categories = [
   { value: 'Restaurants', label: 'Restaurants' },
   { value: 'Recipes', label: 'Recipes' },
-  { value: 'Meal Plan', label: 'Meal Plan' },
 ]
 
 const isMobileMenuOpen = ref(false)

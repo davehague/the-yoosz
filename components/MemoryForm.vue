@@ -12,7 +12,6 @@
           class="p-2 mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
           <option value="Restaurants">Restaurants</option>
           <option value="Recipes">Recipes</option>
-          <option value="Meal Plan">Meal Plan</option>
         </select>
       </div>
       <div>
@@ -117,17 +116,46 @@ function initializeForm() {
 }
 
 const submitForm = () => {
-  const memoryData: Partial<Memory> = {
-    ...form.value,
-    tags: tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
+  const trimmedForm = {
+    title: form.value.title.trim(),
+    category: form.value.category.trim(),
+    rating: form.value.rating,
+    notes: form.value.notes.trim(),
+    url: form.value.url.trim(),
+    location: {
+      address: form.value.location.address.trim()
+    }
   }
 
+  const memoryData: Partial<Memory> = Object.entries(trimmedForm).reduce((acc, [key, value]) => {
+    if (typeof value === 'string' && value !== '') {
+      (acc as any)[key] = value
+    } else if (typeof value === 'object' && value !== null) {
+      (acc as any)[key] = Object.entries(value).reduce((innerAcc, [innerKey, innerValue]) => {
+        if (typeof innerValue === 'string' && innerValue !== '') {
+          (innerAcc as any)[innerKey] = innerValue
+        }
+        return innerAcc
+      }, {})
+    } else if (typeof value === 'number') {
+      (acc as any)[key] = value
+    }
+    return acc
+  }, {} as Partial<Memory>)
+
+  memoryData.tags = tagsInput.value
+    .split(',')
+    .map(tag => tag.trim().toLowerCase())
+    .filter(tag => tag !== '')
+
+  console.log(memoryData)
   emit('save', memoryData)
 
   if (!isEditing.value) {
     resetForm()
   }
 }
+
 
 const resetForm = () => {
   form.value = {

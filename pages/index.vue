@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-4">
-    
+
     <div class="flex justify-between mb-6">
       <h1 class="text-3xl font-semibold text-gray-800">{{ currentCategory }}</h1>
       <button @click="toggleForm"
@@ -11,7 +11,7 @@
 
     <div class="transition-all duration-300 ease-in-out"
       :class="{ 'opacity-0 max-h-0 overflow-hidden': !isFormVisible, 'opacity-100 max-h-screen': isFormVisible }">
-      <MemoryForm v-if="isFormVisible" @add-memory="addMemory" :category="currentCategory" />
+      <MemoryForm v-if="isFormVisible" @save="addMemory" :category="currentCategory" />
     </div>
 
     <MemoryList />
@@ -36,12 +36,17 @@ const toggleForm = () => {
   isFormVisible.value = !isFormVisible.value;
 };
 
-const addMemory = (newMemory: Omit<Memory, 'id' | 'createdAt' | 'updatedAt'>) => {
+const addMemory = (newMemory: Partial<Memory>) => {
   const memory: Memory = {
-    ...newMemory,
     id: Date.now().toString(),
+    title: '',
+    category: '',
+    rating: 0,
+    notes: '',
+    tags: [],
     createdAt: new Date(),
     updatedAt: new Date(),
+    ...newMemory,
   };
   memoriesStore.addMemory(memory);
   isFormVisible.value = false; // Hide the form after adding a memory

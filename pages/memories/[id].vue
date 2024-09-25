@@ -1,8 +1,8 @@
 <template>
   <div class="max-w-2xl mx-auto px-4 py-8">
     <div v-if="memory" class="bg-white rounded-lg shadow p-6">
-      <h1 class="text-3xl font-bold text-center mb-6">{{ isEditing ? 'Edit Memory' : memory.title }}</h1>
-
+      <h1 class="text-3xl font-bold text-left mb-6">{{ isEditing ? 'Edit' : memory.title }}</h1>
+      
       <template v-if="!isEditing">
         <div class="space-y-4">
           <p><span class="font-semibold">Category:</span> {{ memory.category }}</p>
@@ -117,8 +117,10 @@ const handleDelete = async () => {
 };
 
 const cancelEdit = () => {
-  isEditing.value = false;
-  // Remove the edit query parameter
-  router.replace({ query: {} });
+  // Use this for when we have a proper details page
+  // isEditing.value = false;
+  // router.replace({ query: {} }); // Remove the edit query parameter
+
+  router.push('/');
 };
 </script>

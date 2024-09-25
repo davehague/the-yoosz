@@ -59,7 +59,7 @@ import { StarIcon, MapPinIcon, LinkIcon, Trash2, Edit } from 'lucide-vue-next'
 import { type Memory } from '~/types/interfaces'
 
 const hasPhysicalAddress = (address: string) => {
-  return !address.includes('http')
+  return address && address.length > 0 && !address.includes('http')
 }
 
 const appleMapsLink = computed(() => {
