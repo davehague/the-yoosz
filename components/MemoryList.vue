@@ -102,7 +102,7 @@ onMounted(async () => {
 })
 
 const handleEdit = (id: string) => {
-  router.push(`/memories/${id}`)
+  router.push({ path: `/memories/${id}`, query: { edit: 'true' } })
 }
 
 const handleDelete = async (id: string) => {
