@@ -4,7 +4,7 @@
       <label for="tag" class="block text-sm font-medium text-gray-700">Tag</label>
       <div class="relative">
         <select id="tag" v-model="selectedTag" @change="emitFilters"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 pr-8">
+          class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 pr-8">
           <option value="">All Tags</option>
           <option v-for="tag in currentTags" :key="tag" :value="tag">
             {{ tag }}
@@ -19,7 +19,7 @@
       <label for="search" class="block text-sm font-medium text-gray-700">Search</label>
       <div class="relative">
         <input id="search" v-model="searchQuery" @input="emitFilters" type="text" placeholder="Search title or notes"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 pr-10">
+          class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 pr-10">
         <button v-if="searchQuery" @click="clearSearch" class="absolute inset-y-0 right-0 flex items-center pr-3">
           <XCircle class="h-5 w-5 text-gray-400" />
         </button>

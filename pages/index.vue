@@ -37,7 +37,6 @@ const addMemory = (newMemory: Omit<Memory, 'id' | 'createdAt' | 'updatedAt'>) =>
     id: Date.now().toString(),
     createdAt: new Date(),
     updatedAt: new Date(),
-    category: currentCategory.value
   };
   memoriesStore.addMemory(memory);
   isFormVisible.value = false; // Hide the form after adding a memory

@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const currentCategory = ref('restaurants')
+const currentCategory = ref('Restaurants')
 
 const changeCategory = (category: string) => {
   currentCategory.value = category

@@ -22,7 +22,7 @@
             <Trash2 class="w-4 h-4 mr-1" />
             Delete
           </button>
-          <button @click="router.push('/memories')" class="text-gray-600 hover:text-gray-700 flex items-center">
+          <button @click="router.push('/')" class="text-gray-600 hover:text-gray-700 flex items-center">
             <ArrowLeft class="w-4 h-4 mr-1" />
             Back to List
           </button>
