@@ -53,23 +53,33 @@ export const useMealPlanner = () => {
       </ul>
     `
 
-    try {
-      const response = await $fetch<EmailApiResponse>('/api/sendEmail', {
-        method: 'POST',
-        body: {
-          toEmail: 'david.hague@gmail.com', 
-          subject: 'Your Weekly Meal Plan from the Yoosz',
-          htmlTemplate,
-        },
-      })
+    const emailAddresses = ['david.hague@gmail.com', 'amandagamberale@gmail.com']
 
-      if (response.success) {
-        console.log('Meal plan email sent successfully')
+    try {
+      const responses = await Promise.all(emailAddresses.map(email =>
+        $fetch<EmailApiResponse>('/api/sendEmail', {
+          method: 'POST',
+          body: {
+            toEmail: email,
+            subject: 'Your Weekly Meal Plan from the Yoosz',
+            htmlTemplate,
+          },
+        })
+      ))
+
+      const allSuccessful = responses.every(response => response.success)
+      if (allSuccessful) {
+        console.log('Meal plan emails sent successfully to all recipients')
       } else {
-        console.error('Failed to send meal plan email:', response.message)
+        console.error('Failed to send meal plan email to some recipients')
+        responses.forEach((response, index) => {
+          if (!response.success) {
+            console.error(`Failed to send to ${emailAddresses[index]}: ${response.message}`)
+          }
+        })
       }
     } catch (error) {
-      console.error('Error sending meal plan email:', error)
+      console.error('Error sending meal plan emails:', error)
     }
   }
 
