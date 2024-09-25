@@ -70,7 +70,7 @@ export const useMemoriesStore = defineStore("memories", () => {
     );
   });
 
-  const getMemoriesByCategory = (category: string) => {
+  const getMemoriesByCategory = (category: string) : Memory[] => {
     return memories.value.filter((m) => m.category === category);
   };
 
