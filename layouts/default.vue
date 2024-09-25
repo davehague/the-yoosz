@@ -2,7 +2,7 @@
   <div class="flex flex-col min-h-screen bg-gray-100">
     <SiteHeader :current-category="currentCategory" @change-category="changeCategory" />
 
-    <main class="flex-grow container mx-auto px-4 py-8">
+    <main class="flex-grow container mx-auto p-4">
       <slot />
     </main>
 

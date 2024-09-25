@@ -1,9 +1,11 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-4">
-    <div class="mb-6">
+    
+    <div class="flex justify-between mb-6">
+      <h1 class="text-3xl font-semibold text-gray-800">{{ currentCategory }}</h1>
       <button @click="toggleForm"
         class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
-        {{ isFormVisible ? 'Hide' : 'Add New Memory' }}
+        {{ isFormVisible ? 'Hide' : 'New ' + singularCategory }}
       </button>
     </div>
 
@@ -26,6 +28,9 @@ import MemoryForm from '~/components/MemoryForm.vue';
 const memoriesStore = useMemoriesStore();
 const isFormVisible = ref(false);
 const currentCategory = inject('currentCategory') as Ref<string>;
+const singularCategory = computed(() => {
+  return currentCategory.value.endsWith('s') ? currentCategory.value.slice(0, -1) : currentCategory.value;
+});
 
 const toggleForm = () => {
   isFormVisible.value = !isFormVisible.value;
