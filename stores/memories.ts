@@ -99,4 +99,6 @@ export const useMemoriesStore = defineStore("memories", () => {
     getAllCategories,
     getAllTags,
   };
-});
+}, {
+  persist: true
+} as any);

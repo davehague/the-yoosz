@@ -1,13 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-04-03',
+  compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
   modules: [
-    '@pinia/nuxt', '@nuxtjs/tailwindcss',
+    "@pinia/nuxt",
+    "@nuxtjs/tailwindcss",
+    'pinia-plugin-persistedstate/nuxt',
   ],
-  plugins: [
-    '~/plugins/init-store.ts'
-  ],
+  plugins: ["~/plugins/init-store.ts"],
   app: {
     head: {
       title: "The Yoosz",
@@ -40,4 +40,4 @@ export default defineNuxtConfig({
       ],
     },
   },
-})
+});
