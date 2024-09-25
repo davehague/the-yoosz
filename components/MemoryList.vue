@@ -1,8 +1,7 @@
 <template>
   <div>
     <MemoryFilters 
-      :memories="memories" 
-      :categories="uniqueCategories"
+      :memories="filteredMemories" 
       :tags="uniqueTags"
       @filter="applyFilters" 
     />
@@ -22,31 +21,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, inject } from 'vue'
 import { useMemoriesStore } from '~/stores/memories'
 import MemoryCard from './MemoryCard.vue'
 import MemoryFilters from './MemoryFilters.vue'
 import { useRouter } from 'vue-router'
-import type { Memory } from '~/types/interfaces'
 
 const memoriesStore = useMemoriesStore()
 const router = useRouter()
+const currentCategory = inject('currentCategory', ref('')) as Ref<string>
 
-const memories = computed(() => memoriesStore.memories)
-
-const uniqueCategories = computed(() => {
-  const categories = new Set<string>()
-  for (const memory of memories.value) {
-    if (memory.category) {
-      categories.add(memory.category)
-    }
-  }
-  return Array.from(categories).sort()
-})
+const allMemories = computed(() => memoriesStore.memories)
 
 const uniqueTags = computed(() => {
   const tags = new Set<string>()
-  for (const memory of memories.value) {
+  for (const memory of allMemories.value) {
     for (const tag of memory.tags) {
       if (tag) {
         tags.add(tag)
@@ -57,48 +46,33 @@ const uniqueTags = computed(() => {
 })
 
 const filters = ref({
-  category: '',
   tag: '',
   search: '',
 })
 
-const filteredMemories = ref<Memory[]>([])
+const filteredMemories = computed(() => {
+  return allMemories.value.filter((memory) => {
+    const categoryMatch = memory.category.toLowerCase() === currentCategory.value.toLowerCase();
+    const tagMatch = !filters.value.tag || memory.tags.includes(filters.value.tag);
+    const searchMatch = !filters.value.search || 
+      memory.title.toLowerCase().includes(filters.value.search.toLowerCase()) ||
+      (memory.notes && memory.notes.toLowerCase().includes(filters.value.search.toLowerCase()));
+    
+    return categoryMatch && tagMatch && searchMatch;
+  });
+});
 
-const applyFilters = (newFilters: { category: string; tag: string; search: string }) => {
+const applyFilters = (newFilters: { tag: string; search: string }) => {
   filters.value = newFilters
-}
-
-const debouncedFilter = useDebounce(filterMemories, 300)
-
-watch(
-  [() => filters.value, memories],
-  () => {
-    debouncedFilter()
-  },
-  { deep: true }
-)
-
-function filterMemories() {
-  filteredMemories.value = memories.value.filter(memory => {
-    const categoryMatch = !filters.value.category || memory.category === filters.value.category
-    const tagMatch = !filters.value.tag || memory.tags.includes(filters.value.tag)
-    
-    if (!filters.value.search) {
-      return categoryMatch && tagMatch
-    }
-    
-    const searchLower = filters.value.search.toLowerCase()
-    const searchMatch = 
-      (memory.title?.toLowerCase().includes(searchLower) ?? false) ||
-      (memory.notes?.toLowerCase().includes(searchLower) ?? false)
-    
-    return categoryMatch && tagMatch && searchMatch
-  })
 }
 
 onMounted(async () => {
   await memoriesStore.fetchMemories()
-  filterMemories()
+})
+
+watch(currentCategory, () => {
+  // Reset filters when category changes
+  filters.value = { tag: '', search: '' }
 })
 
 const handleEdit = (id: string) => {
@@ -109,26 +83,10 @@ const handleDelete = async (id: string) => {
   if (confirm('Are you sure you want to delete this memory?')) {
     try {
       await memoriesStore.deleteMemory(id)
-      filterMemories()
     } catch (error) {
       console.error('Failed to delete memory:', error)
       alert('Failed to delete memory. Please try again.')
     }
   }
-}
-
-function useDebounce<T extends (...args: any[]) => any>(
-  fn: T,
-  delay: number
-): T {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null
-  return ((...args: Parameters<T>) => {
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId)
-    }
-    timeoutId = setTimeout(() => {
-      fn(...args)
-    }, delay)
-  }) as T
 }
 </script>

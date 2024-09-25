@@ -57,6 +57,23 @@ export default class PersistentDataService {
     return data.length > 0 ? data[0] : null;
   }
 
+  // ============= Tags ============= //
+  static async getTagsForCategory(category: string): Promise<string[]> {
+    const { data, error } = await supabase
+      .from('memories')
+      .select('tags')
+      .ilike('category', category);
+
+    if (error) {
+      console.error('Error fetching tags for category:', error);
+      throw error;
+    }
+
+    // Flatten the array of tag arrays and remove duplicates
+    const uniqueTags = Array.from(new Set(data.flatMap(item => item.tags || [])));
+    return uniqueTags;
+  }
+
   // ============= Memories ============= //
   static async addMemory(
     memory: Omit<Memory, "id" | "createdAt" | "updatedAt">

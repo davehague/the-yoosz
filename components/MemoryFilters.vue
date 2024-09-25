@@ -1,51 +1,26 @@
 <template>
   <div class="mb-6 space-y-4">
-    <div class="flex space-x-4">
-      <div class="w-1/2">
-        <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-        <div class="relative">
-          <select
-            id="category"
-            v-model="selectedCategory"
-            @change="emitFilters"
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 pr-8"
-          >
-            <option value="">All Categories</option>
-            <option v-for="category in categories" :key="category" :value="category">
-              {{ category }}
-            </option>
-          </select>
-          <button
-            v-if="selectedCategory"
-            @click="clearCategory"
-            class="absolute inset-y-0 right-0 flex items-center pr-7"
-          >
-            <XCircle class="h-5 w-5 text-gray-400" />
-          </button>
-        </div>
-      </div>
-      <div class="w-1/2">
-        <label for="tag" class="block text-sm font-medium text-gray-700">Tag</label>
-        <div class="relative">
-          <select
-            id="tag"
-            v-model="selectedTag"
-            @change="emitFilters"
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 pr-8"
-          >
-            <option value="">All Tags</option>
-            <option v-for="tag in tags" :key="tag" :value="tag">
-              {{ tag }}
-            </option>
-          </select>
-          <button
-            v-if="selectedTag"
-            @click="clearTag"
-            class="absolute inset-y-0 right-0 flex items-center pr-7"
-          >
-            <XCircle class="h-5 w-5 text-gray-400" />
-          </button>
-        </div>
+    <div>
+      <label for="tag" class="block text-sm font-medium text-gray-700">Tag</label>
+      <div class="relative">
+        <select
+          id="tag"
+          v-model="selectedTag"
+          @change="emitFilters"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 pr-8"
+        >
+          <option value="">All Tags</option>
+          <option v-for="tag in currentTags" :key="tag" :value="tag">
+            {{ tag }}
+          </option>
+        </select>
+        <button
+          v-if="selectedTag"
+          @click="clearTag"
+          class="absolute inset-y-0 right-0 flex items-center pr-7"
+        >
+          <XCircle class="h-5 w-5 text-gray-400" />
+        </button>
       </div>
     </div>
     <div>
@@ -83,33 +58,24 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { XCircle, RefreshCw } from 'lucide-vue-next';
-import type { Memory } from '~/types/interfaces';
+import { useTagsStore } from '@/stores/tags';
 
-const props = defineProps<{
-  memories: Memory[];
-  categories: string[];
-  tags: string[];
-}>();
+const tagsStore = useTagsStore();
+const currentCategory = inject('currentCategory') as Ref<string>
+const currentTags = ref<string[]>([]);
 
 const emit = defineEmits<{
-  (e: 'filter', filters: { category: string; tag: string; search: string }): void;
+  (e: 'filter', filters: { tag: string; search: string }): void;
 }>();
 
-const selectedCategory = ref('');
 const selectedTag = ref('');
 const searchQuery = ref('');
 
 const emitFilters = () => {
   emit('filter', {
-    category: selectedCategory.value,
     tag: selectedTag.value,
     search: searchQuery.value,
   });
-};
-
-const clearCategory = () => {
-  selectedCategory.value = '';
-  emitFilters();
 };
 
 const clearTag = () => {
@@ -123,13 +89,30 @@ const clearSearch = () => {
 };
 
 const clearAll = () => {
-  selectedCategory.value = '';
   selectedTag.value = '';
   searchQuery.value = '';
   emitFilters();
 };
 
-watch([selectedCategory, selectedTag, searchQuery], () => {
+const fetchTagsForCurrentCategory = async () => {
+  const tags = await tagsStore.fetchTagsForCategory(currentCategory.value);
+  currentTags.value = tags.sort((a, b) => a.localeCompare(b));
+};
+
+watch([selectedTag, searchQuery], () => {
   emitFilters();
 }, { immediate: true });
+
+watch(currentCategory, async (newCategory, oldCategory) => {
+  if (newCategory !== oldCategory) {
+    await fetchTagsForCurrentCategory();
+    // Clear the selected tag when changing categories
+    selectedTag.value = '';
+    emitFilters();
+  }
+});
+
+onMounted(async () => {
+  await fetchTagsForCurrentCategory();
+});
 </script>

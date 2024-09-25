@@ -1,7 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-100 p-4">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">My Memories</h1>
-    
+  <div class="min-h-screen bg-gray-100 p-4">    
     <div class="mb-6">
       <button
         @click="toggleForm"
@@ -15,20 +13,23 @@
       class="transition-all duration-300 ease-in-out"
       :class="{ 'opacity-0 max-h-0 overflow-hidden': !isFormVisible, 'opacity-100 max-h-screen': isFormVisible }"
     >
-      <MemoryForm v-if="isFormVisible" @add-memory="addMemory" />
+      <MemoryForm v-if="isFormVisible" @add-memory="addMemory" :category="currentCategory" />
     </div>
 
-    <MemoryList :memories="memoriesStore.memories" />
+    <MemoryList />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useMemoriesStore } from '../stores/memories';
 import { type Memory } from '~/types/interfaces';
+import MemoryList from '~/components/MemoryList.vue';
+import MemoryForm from '~/components/MemoryForm.vue';
 
 const memoriesStore = useMemoriesStore();
 const isFormVisible = ref(false);
+const currentCategory = inject('currentCategory') as Ref<string>;
 
 const toggleForm = () => {
   isFormVisible.value = !isFormVisible.value;
@@ -39,7 +40,8 @@ const addMemory = (newMemory: Omit<Memory, 'id' | 'createdAt' | 'updatedAt'>) =>
     ...newMemory,
     id: Date.now().toString(),
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    category: currentCategory.value
   };
   memoriesStore.addMemory(memory);
   isFormVisible.value = false; // Hide the form after adding a memory
