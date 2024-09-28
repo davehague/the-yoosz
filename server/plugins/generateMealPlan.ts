@@ -14,9 +14,9 @@ async function startPeriodicMealPlan(nitroApp: any) {
       console.log("Running scheduled meal plan generation and email sending");
       await createAndSendMealPlan();
     },
-    { schedule: "0 7 * * 4" } // "At 07:00 on Thursday"
+    { schedule: "0 15 * * 6", timezone: "America/New_York" } // "At 15:00 (3pm) on Saturday in EST"  
   );
 
   console.log("Running meal plan generation and email sending (if uncommented)");
-//   await createAndSendMealPlan();
+  //await createAndSendMealPlan();
 }
